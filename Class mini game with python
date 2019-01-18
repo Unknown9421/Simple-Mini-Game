@@ -1,0 +1,75 @@
+"""
++ Creat mini game with two hero fight
++ Weapon is random
++ Winner is a hero have final HP > 0
++ Return result is a Tuple
+"""
+import random
+from sty import fg, bg, ef, rs, Rule, Render
+
+
+class Hero:
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+
+    def __str__(self):
+        return '{} {}'.format(self.name, self.hp)
+
+    def attack(self, weapon, rival):
+        rival.hp -= weapon.damage
+
+    def get_winner(self):
+        print(fg.red + 'THIS WINER IS {:} WITH FINAL HP {}'.format(self.name, self.hp))
+        return self.name, self.hp
+
+class Weapon:
+    def __init__(self, name, damage):
+        self.name = name
+        self.damage = damage
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+
+def resolve(hero1, hero2):
+    result = ('', 0)
+    fight = random.choice(range(2))
+    weapons = [Weapon('Gun', 100), Weapon('Sword', 50), Weapon('Pear', 70), Weapon('Boom', 300), Weapon('Laser', 150),
+               Weapon('Blade', 55)]
+    weapon = random.choice(weapons)
+    _round = 0
+    for match in range(100):
+        print(fg.blue + 'This is weapon: {}'.format(weapon) + fg.rs)
+        _round += 1
+        if fight == 0:
+            if _round % 2 == 1:
+                hero1.attack(weapon, hero2)
+                print('This is round: {} {} attack {}'.format(_round, hero1, hero2))
+            else:
+                hero2.attack(weapon, hero1)
+                print('This is round: {} {} attack {}'.format(_round, hero2, hero1))
+        if fight == 1:
+            if _round % 2 == 1:
+                hero2.attack(weapon, hero1)
+                print('This is round: {} {} attack {}'.format(_round, hero2, hero1))
+            else:
+                hero1.attack(weapon, hero2)
+                print('This is round: {} {} attack {}'.format(_round, hero1, hero2))
+        if hero1.hp <= 0 or hero2.hp <= 0:
+            if hero1.hp > 0:
+                result = hero1.get_winner()
+            else:
+                result = hero2.get_winner()
+
+            return result
+
+
+def main():
+    hero1 = Hero('Superman', 1000)
+    hero2 = Hero('Batman', 1000)
+    print(resolve(hero1, hero2))
+
+
+if __name__ == "__main__":
+    main()
